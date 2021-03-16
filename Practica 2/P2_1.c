@@ -1,3 +1,7 @@
+/*
+    Autor: Brigada 4
+    Fecha: 11/03/2021
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
