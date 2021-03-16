@@ -7,87 +7,87 @@
 #include <stdlib.h>
 
 // Generamos los prototipos de las funciones, que usaran apuntadores
-void Suma(float *Operando_1, float *Operando_2, float *Resultado);
-void Resta(float *Operando_1, float *Operando_2, float *Resultado);
-void Multiplicacion(float *Operando_1, float *Operando_2, float *Resultado);
-void Division(float *Operando_1, float *Operando_2, float *Resultado);
+void suma(float *a, float *b, float *c);
+void resta(float *a, float *b, float *c);
+void multiplicacion(float *a, float *b, float *c);
+void division(float *a, float *b, float *c);
 
 int main()
 {
     // Inicializamos las variables en 0 para evitar que contengan basura
-    float Operando_1 = 0;
-    float Operando_2 = 0;
-    float Resultado = 0;
-    int Opcion = 0;
+    float operando1 = 0;
+    float operando2 = 0;
+    float resultado = 0;
+    int opcion = 0;
 
     printf("Bienvenido, ¿que operacion quiere realizar?\n");
     printf("1)Suma\n");
     printf("2)Resta\n");
     printf("3)Multiplicacion\n");
     printf("4)Division\n");
-    scanf("%d", &Opcion);
+    scanf("%d", &opcion);
     
     // Creamos un switch para llamar la funcion elegida por el usuario
-    switch (Opcion)
+    switch (opcion)
     {
     case 1:
         printf("\n¿Cual seria el valor del primer operando?\n");
-        scanf("%f", &Operando_1);
+        scanf("%f", &operando1);
         printf("\n¿Cual seria el valor del segundo operando?\n");
-        scanf("%f", &Operando_2);
-        Suma(&Operando_1, &Operando_2, &Resultado);
+        scanf("%f", &operando2);
+        suma(&operando1, &operando2, &resultado);
         break;
     case 2:
         printf("\n¿Cual seria el valor del primer operando?\n");
-        scanf("%f", &Operando_1);
+        scanf("%f", &operando1);
         printf("\n¿Cual seria el valor del segundo operando?\n");
-        scanf("%f", &Operando_2);
-        Resta(&Operando_1, &Operando_2, &Resultado);
+        scanf("%f", &operando2);
+        resta(&operando1, &operando2, &resultado);
         break;
     case 3:
         printf("\n¿Cual seria el valor del primer operando?\n");
-        scanf("%f", &Operando_1);
+        scanf("%f", &operando1);
         printf("\n¿Cual seria el valor del segundo operando?\n");
-        scanf("%f", &Operando_2);
-        Multiplicacion(&Operando_1, &Operando_2, &Resultado);
+        scanf("%f", &operando2);
+        multiplicacion(&operando1, &operando2, &resultado);
         break;
     case 4:
         printf("\n¿Cual seria el valor del primer operando?\n");
         scanf("%f", &Operando_1);
         printf("\n¿Cual seria el valor del segundo operando?\n");
         scanf("%f", &Operando_2);
-        Division(&Operando_1, &Operando_2, &Resultado);
+        division(&operando1, &operando2, &resultado);
         break;
     }
 
     // Se muestra el resultado al usuario
-    printf("El resultado de la operacion es: %f\n", Resultado);
+    printf("El resultado de la operacion es: %.2f\n", resultado);
 
     return 0;
 }
 
 /*
     Implementacion de las funciones.
-    Al ser llamadas usan los valores guardados en el operando para
-    realizar la operacion que se almacenara en el resultado
+    Al ser llamadas usan los valores guardados en la direccion de memoria para
+    realizar la operacion, por lo que no es necesario ningun valor de retorno
 */
 
-void Suma(float *Operando_1, float *Operando_2, float *Resultado)
+void suma(float *a, float *b, float *c)
 {
-    *Resultado = *Operando_1 + *Operando_2;
+    *c = *a + *b;
 }
 
-void Resta(float *Operando_1, float *Operando_2, float *Resultado)
+void resta(float *a, float *b, float *c)
 {
-    *Resultado = *Operando_1 - *Operando_2;
+    *c = *a - *b;
 }
 
-void Multiplicacion(float *Operando_1, float *Operando_2, float *Resultado)
+void multiplicacion(float *a, float *b, float *c)
 {
-    *Resultado = *Operando_1 * *Operando_2;
+    *c = *a * *b;
 }
 
-void Division(float *Operando_1, float *Operando_2, float *Resultado)
+void division(float *a, float *b, float *c)
 {
-    *Resultado = *Operando_1 / *Operando_2;
+    *c = *a / *b;
 }
