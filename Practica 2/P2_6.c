@@ -53,9 +53,9 @@ int main()
         break;
     case 4:
         printf("\n¿Cual seria el valor del primer operando?\n");
-        scanf("%f", &Operando_1);
+        scanf("%f", &operando1);
         printf("\n¿Cual seria el valor del segundo operando?\n");
-        scanf("%f", &Operando_2);
+        scanf("%f", &operando2);
         division(&operando1, &operando2, &resultado);
         break;
     }
