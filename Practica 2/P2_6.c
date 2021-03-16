@@ -61,7 +61,7 @@ int main()
     }
 
     // Se muestra el resultado al usuario
-    printf("El resultado de la opercion es: %f\n", Resultado);
+    printf("El resultado de la operacion es: %f\n", Resultado);
 
     return 0;
 }
