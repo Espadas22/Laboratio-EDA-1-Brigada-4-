@@ -51,4 +51,7 @@ int main(){
     //printf("%f",termino1.real);
     printf("¿Cual seria el valor del termino complejo del segundo termino?\n");
     scanf("%f",&termino2.complejo);
+    
+    suma(&termino1,&termino2,&resultado);
+    multiplicacion(&termino1,&termino2,&resultado);
 }
