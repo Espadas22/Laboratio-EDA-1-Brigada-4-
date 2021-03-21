@@ -2,17 +2,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-COMPLEJO crear_lista(){
-    COMPLEJO ci;
+COMPLEJO* crear_lista(float t1,float t2){
+    COMPLEJO *ci;
     //le fijamos valores al primer y ultimo elemento
     //asi podemos verificar si se ha modificado/esta vacia la lista
-    ci.real = 0;
-    ci.complejo = 0;
+    ci->real = t1;
+    ci->complejo = t2;
     return ci;
 }
-
-void suma(COMPLEJO *t1, COMPLEJO *t2, COMPLEJO *resultado){   
-    resultado->real = t1->real + t2->real;
+void leerComplejo(COMPLEJO *c){
+    printf("¿Cual seria el valor del termino real del numero?\n");
+    scanf("%f",&c->real);
+    //printf("%f",termino1.real);
+    printf("¿Cual seria el valor del termino complejo del numero?\n");
+    scanf("%f",&c->complejo);
+    //imprimir(c);
+}
+void suma(COMPLEJO *t1, COMPLEJO *t2, COMPLEJO *resultado){
+    resultado->real = (t1->real) + (t2->real);
     resultado->complejo = t1->complejo + t2->complejo;
 }
 
@@ -20,39 +27,28 @@ void multiplicacion(COMPLEJO *t1, COMPLEJO *t2, COMPLEJO *resultado){
     resultado->real = (t1->real * t2->real) + ((-1)*(t1->complejo * t2->complejo));
     resultado->complejo = (t1->real * t2->complejo) + (t2->real * t1->complejo);
 }
-void imprimir(COMPLEJO c1){
-    printf("%.1f",c1.real); 
-    if(c1.complejo>=0){
+void imprimir(COMPLEJO *c1){
+    printf("%.1f",c1->real); 
+    if(c1->complejo>=0){
         printf("+");
     }
-    printf("%.1fi",c1.complejo);
+    printf("%.1fi",c1->complejo);
 }
 int main(){
-    COMPLEJO resultado;
-    COMPLEJO termino1 = crear_lista();
-    COMPLEJO termino2 = crear_lista();
+    COMPLEJO *resultado = (COMPLEJO*)malloc(sizeof(COMPLEJO));
+    
+    COMPLEJO termino1; 
+    COMPLEJO termino2;
 
     printf("Bienvenido a la calculadora con numeros complejos.\n");
     printf("Trabajaremos con dos terminos para sumar o multiplicar.\n");
 
-    printf("¿Cual seria el valor del termino real del primer termino?\n");
-    scanf("%f",&termino1.real);
-    //printf("%f",termino1.real);
-    printf("¿Cual seria el valor del termino complejo del primer termino?\n");
-    scanf("%f",&termino1.complejo);
+    leerComplejo(&termino1);
+    leerComplejo(&termino2);
 
-    printf("¿Cual seria el valor del termino real del segundo termino?\n");
-    scanf("%f",&termino2.real);
-    //printf("%f",termino1.real);
-    printf("¿Cual seria el valor del termino complejo del segundo termino?\n");
-    scanf("%f",&termino2.complejo);
+    suma(&termino1,&termino2,resultado);
+    printf("El resultado de la suma es: "); imprimir(resultado); printf("\n");
 
-    suma(&termino1,&termino2,&resultado);
-    printf("El resultado de la suma es: ");
-    imprimir(resultado);
-    printf("\n");
-
-    multiplicacion(&termino1,&termino2,&resultado);
-    printf("El resultado de la multiplicacion es: ");
-    imprimir(resultado);
+    multiplicacion(&termino1,&termino2,resultado);
+    printf("El resultado de la multiplicacion es: "); imprimir(resultado);
 }
