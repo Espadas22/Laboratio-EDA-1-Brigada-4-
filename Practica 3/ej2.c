@@ -9,19 +9,36 @@
 
 int main()
 {
+    int Operacion; // Variable para controlar la decicion del usuario
+    POLINOMIO* Resultado = NULL; // Apuntador para el resultado
+    
+    printf("Quieres sumar(0) o restar(1) polinomios? ");
+    scanf("%d", &Operacion);
+
+    printf("\nCaptura de datos del primer polinomio:\n");
+
     POLINOMIO* Polinomio_1 = Crear_polinomio();
     printf("\nEl primer polinomio es:\n");
     Imprimir_polinomio(Polinomio_1);
-    printf("\n");
+
+    printf("\nCaptura de datos del segundo polinomio:\n");
 
     POLINOMIO* Polinomio_2 = Crear_polinomio();
     printf("\nEl segundo polinomio es:\n");
     Imprimir_polinomio(Polinomio_2);
-    printf("\n");
 
-    POLINOMIO* Resultado = Restar_polinomios(Polinomio_1, Polinomio_2);
-    printf("\nY su resta es:\n");
-    Imprimir_polinomio(Resultado);
+    if (Operacion == 0)
+    {
+        Resultado = Sumar_polinomios(Polinomio_1, Polinomio_2);
+        printf("\nY su suma es:\n");
+        Imprimir_polinomio(Resultado);
+    }
+    else
+    {
+        Resultado = Restar_polinomios(Polinomio_1, Polinomio_2);
+        printf("\nY su resta es:\n");
+        Imprimir_polinomio(Resultado);
+    }
     
     Liberar_polinomio(Polinomio_1);
     Liberar_polinomio(Polinomio_2);
@@ -60,8 +77,22 @@ void Imprimir_polinomio(POLINOMIO* Polinomio)
     {
         if (Polinomio -> Terminos -> Coeficiente == 0)
             continue; // Si el coeficiente es 0 no se imprime
+        else if (Polinomio -> Terminos -> Exponente == 1) // Cuando se imprime un exponente 1
+            if (Polinomio -> Terminos -> Coeficiente == 1) // Si el coeficiente es 1, no se muestra
+                printf("+ x ");
+            else if (Polinomio -> Terminos -> Coeficiente == -1) // Si es coeficiene es -1, se muestra el signo
+                printf("- x ");
+            else if (Polinomio -> Terminos -> Coeficiente < 0) // Para casos con coeficientes negativos
+                printf("- %dx", (-1) * Polinomio -> Terminos -> Coeficiente);
+            else // Para los coeficientes positivos
+                printf("+ %dx ", Polinomio -> Terminos -> Coeficiente);
         else if(i == 0) // Cuando se imprime el primer termino
-            printf("%dx^%d ", Polinomio -> Terminos -> Coeficiente, Polinomio -> Terminos -> Exponente);
+            if (Polinomio -> Terminos -> Coeficiente == 1) // Si el coeficiente es 1 no es necesario escribrilo
+                printf("x^%d ", Polinomio -> Terminos -> Exponente);
+            else if (Polinomio -> Terminos -> Coeficiente == -1) // Si es negativo hay que expresar el signo
+                printf("-x^%d ", Polinomio -> Terminos -> Exponente);
+            else
+                printf("%dx^%d ", Polinomio -> Terminos -> Coeficiente, Polinomio -> Terminos -> Exponente);
         else if (i == Polinomio -> Grado) // Para la impresion del termino independiente
             if (Polinomio -> Terminos -> Coeficiente < 0) // Para los casos donde es negativo
                 printf("- %d\n", (-1) * Polinomio -> Terminos -> Coeficiente);
