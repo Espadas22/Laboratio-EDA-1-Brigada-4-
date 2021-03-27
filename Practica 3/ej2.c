@@ -12,7 +12,7 @@ int main()
     int Operacion; // Variable para controlar la decicion del usuario
     POLINOMIO* Resultado = NULL; // Apuntador para el resultado
     
-    printf("Quieres sumar(0) o restar(1) polinomios? ");
+    printf("Quieres sumar(0) o restar(1) polinomios?  ");
     scanf("%d", &Operacion);
 
     printf("\nCaptura de datos del primer polinomio:\n");
@@ -83,7 +83,7 @@ void Imprimir_polinomio(POLINOMIO* Polinomio)
             else if (Polinomio -> Terminos -> Coeficiente == -1) // Si es coeficiene es -1, se muestra el signo
                 printf("- x ");
             else if (Polinomio -> Terminos -> Coeficiente < 0) // Para casos con coeficientes negativos
-                printf("- %dx", (-1) * Polinomio -> Terminos -> Coeficiente);
+                printf("- %dx ", (-1) * Polinomio -> Terminos -> Coeficiente);
             else // Para los coeficientes positivos
                 printf("+ %dx ", Polinomio -> Terminos -> Coeficiente);
         else if(i == 0) // Cuando se imprime el primer termino
@@ -95,9 +95,9 @@ void Imprimir_polinomio(POLINOMIO* Polinomio)
                 printf("%dx^%d ", Polinomio -> Terminos -> Coeficiente, Polinomio -> Terminos -> Exponente);
         else if (i == Polinomio -> Grado) // Para la impresion del termino independiente
             if (Polinomio -> Terminos -> Coeficiente < 0) // Para los casos donde es negativo
-                printf("- %d\n", (-1) * Polinomio -> Terminos -> Coeficiente);
+                printf("- %d", (-1) * Polinomio -> Terminos -> Coeficiente);
             else // En caso de que sea positivo
-                printf("+ %d\n", Polinomio -> Terminos -> Coeficiente);
+                printf("+ %d", Polinomio -> Terminos -> Coeficiente);
         else
             if (Polinomio -> Terminos -> Coeficiente < 0) // Para los terminos negativos
                 if (Polinomio -> Terminos -> Coeficiente == -1) // Si el coeficiente es 1 no es necesario escribirlo
@@ -110,6 +110,8 @@ void Imprimir_polinomio(POLINOMIO* Polinomio)
                 else
                     printf("+ %dx^%d ", Polinomio -> Terminos -> Coeficiente, Polinomio -> Terminos -> Exponente);
     }
+
+    printf("\n"); // Espacio para cuando se termina el polinomio
 
     Polinomio -> Terminos -= Polinomio -> Grado + 1; // Devolvemos al apuntador a su posision original
 }
