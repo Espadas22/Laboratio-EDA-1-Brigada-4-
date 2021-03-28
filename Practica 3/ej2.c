@@ -73,10 +73,17 @@ POLINOMIO* Crear_polinomio()
 
 void Imprimir_polinomio(POLINOMIO* Polinomio)
 {
+    int Ceros = 0; // Variable para controlar el numero de ceros en el polinomio
+
     for (int i = 0; i <= Polinomio -> Grado; i++, Polinomio -> Terminos++)
     {
         if (Polinomio -> Terminos -> Coeficiente == 0)
-            continue; // Si el coeficiente es 0 no se imprime
+        {
+            Ceros++; // Se incrementa el contador de ceros
+            if (Ceros > Polinomio -> Grado) // Si todos los terminos del polinomio son ceros
+                printf("0"); // Se imprime solo un cero
+            continue; // Si el coeficiente es 0 no se imprime y el ciclo sigue
+        }
         else if (Polinomio -> Terminos -> Exponente == 1) // Cuando se imprime un exponente 1
             if (Polinomio -> Terminos -> Coeficiente == 1) // Si el coeficiente es 1, no se muestra
                 printf("+ x ");
