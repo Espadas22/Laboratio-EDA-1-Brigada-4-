@@ -20,8 +20,7 @@ typedef struct _lista LISTA;
 
 NODO* crear_nodo(INFO info);
 bool insertar_inicio(LISTA* lista,INFO info);
-bool insertar_final(LISTA* lista, INFO info);
-bool insertar(LISTA* lista,INFO info,int pos); 
+bool insertar_final(LISTA* lista, INFO info); 
 LISTA* crear_lista();
 bool es_vacia(LISTA *lista);
 bool vaciar(LISTA* lista);

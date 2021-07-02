@@ -7,13 +7,11 @@ int main(){
     {
         printf("\nAgrega un elemento entero al conjunto: ");
         scanf("%d", &nuevo_elemento);
-        fflush(stdin);
 
         agregar(conjunto, nuevo_elemento);
 
         printf("\nQuieres agregar otro elemento? (1) Si (0)No\n");
         scanf("%d", &repetir);
-        fflush(stdin);
 
     } while (repetir);
     
