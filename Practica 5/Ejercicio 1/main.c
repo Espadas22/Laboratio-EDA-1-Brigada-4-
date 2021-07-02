@@ -30,82 +30,71 @@ int main()
                 //Pasamos a la siguiente posicicion de la cadena
                 i++;
             }
-            // Correccion de desplazamiento al salir del while
-            if (!isalnum(infija[i]))
-            {
-                i -= 1;
-            }
             //Se deja un espacio para poder hacer la distincion
             posfija[elementos_pos] = ' ';
             elementos_pos++;
         }
+        
         // Los operadores pasan a la pila
-        else
+
+        //Determinamos la prioridad
+        operador = infija[i];
+        prioridad = determinar_prioridad(operador);
+
+        if (es_vacia(Operadores))
         {
-            //Determinamos la prioridad
-            operador = infija[i];
-            prioridad = determinar_prioridad(operador);
-
-            if (es_vacia(Operadores))
+            push(Operadores, prioridad, operador);
+        }
+        // El parentesis de apertura se coloca sin medir prioridad
+        else if (operador == '(')
+        {
+            push(Operadores, prioridad, operador);
+        }
+        // En los parentesis de cierra vaciamos la pila
+        else if (operador == ')')
+        { // Vaciamos los operadores hasta encontrar un "("
+            while (Operadores->head->operador != '(')
+            {
+                posfija[elementos_pos] = Operadores->head->operador;
+                elementos_pos++;
+                posfija[elementos_pos] = ' ';
+                elementos_pos++;
+                pop(Operadores);
+            }
+            // Eliminamos el "("
+            pop(Operadores);
+        }
+        else // Colocamos los casos en los que se validan operadores
+        {    // Si tiene mayor prioridad se agrega directamente
+            if (prioridad > Operadores->head->prioridad)
             {
                 push(Operadores, prioridad, operador);
             }
-            // El parentesis de apertura se coloca sin medir prioridad
-            else if (operador == '(')
+            /* En los casos de mayor o igual prioridad se sacan
+                operadores hasta encontrae uno con mayor prioridad*/
+            else
             {
-                push(Operadores, prioridad, operador);
-            }
-            // En los parentesis de cierra vaciamos la pila
-            else if (operador == ')')
-            {
-                /*NODO *temporal = Operadores->head;*/
-
-                // Vaciamos los operadores hasta encontrar un "("
-                while (Operadores->head->operador != '(')
+                while (prioridad <= Operadores->head->prioridad)
                 {
                     posfija[elementos_pos] = Operadores->head->operador;
                     elementos_pos++;
                     posfija[elementos_pos] = ' ';
                     elementos_pos++;
                     pop(Operadores);
+                    // Si la lista se vacia, terminamos el ciclo
+                    if (es_vacia(Operadores))
+                        break;
                 }
-                // Eliminamos el "("
-                pop(Operadores);
-            }
-            else // Colocamos los casos en los que se validan operadores
-            {    // Si tiene mayor prioridad se agrega directamente
-                if (prioridad > Operadores->head->prioridad)
-                {
-                    push(Operadores, prioridad, operador);
-                    //imprimir_pila(Operadores);
-                }
-                /* En los casos de mayor o igual prioridad se sacan
-                operadores hasta encontrae uno con mayor prioridad*/
-                else
-                {
-                    while (prioridad <= Operadores->head->prioridad)
-                    {
-                        posfija[elementos_pos] = Operadores->head->operador;
-                        elementos_pos++;
-                        posfija[elementos_pos] = ' ';
-                        elementos_pos++;
-                        pop(Operadores);
-                        // Si la lista se vacia, terminamos el ciclo
-                        if(es_vacia(Operadores))
-                            break;
-                    }
-                    // Una vez fuera los operadores mayores introducimos el nuevo
-                    push(Operadores, prioridad, operador);
-                    //imprimir_pila(Operadores);
-                }
+                // Una vez fuera los operadores mayores introducimos el nuevo
+                push(Operadores, prioridad, operador);
             }
         }
     }
 
     // Se sacan los operadores restantes de la pila
-    while(!es_vacia(Operadores))
+    while (!es_vacia(Operadores))
     {
-        posfija[elementos_pos] = Operadores -> head -> operador;
+        posfija[elementos_pos] = Operadores->head->operador;
         elementos_pos++;
         posfija[elementos_pos] = ' ';
         elementos_pos++;
