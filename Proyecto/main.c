@@ -11,12 +11,15 @@ int main()
     PILA* Operadores = crear_pila();
     COLA* Posfija = crear_pila();
 
-    printf("Introduce una cadena en notacion infija (sin espacios):\n");
-    scanf("%s", infija);
+    printf("Introduce una cadena en notacion infija:\n");
+    gets(infija);
 
     //Comenzamos a recorrer la cadena
     for (int i = 0; i < strlen(infija); i++)
     {
+        // Si hay espacio en la cadena original, estos no se procesan
+        while(isspace(infija[i]))
+            i++;
         // Los numeros pasan directo a la cadena posfija
         if (isalnum(infija[i]))
         {
@@ -29,6 +32,10 @@ int main()
             //Se deja un espacio para poder hacer la distincion entre numeros consecutivos
             encolar(Posfija, 0, ' ', false);
         }
+        
+        // Se vuelven a eliminar los espacio se la cadena
+        while(isspace(infija[i]))
+            i++;
         
         // Los operadores pasan a la pila
 
