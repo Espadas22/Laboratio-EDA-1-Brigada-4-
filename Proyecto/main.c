@@ -7,8 +7,9 @@ int main()
     //Auxiliares para la creacion de los nodos
     char operador;
     int prioridad;
-
-    PILA* Operadores = crear_pila();
+    double valor = 0;
+    //auxiliar para guardar cadena
+	PILA* Operadores = crear_pila();
     COLA* Posfija = crear_pila();
 
     printf("Introduce una cadena en notacion infija:\n");
@@ -26,18 +27,23 @@ int main()
             // Para tomar todos los dígitos que componen un numero
             while (isalnum(infija[i]))
             {
-                encolar(Posfija, 0, infija[i], false);
+                // Se acomoda segun su posicion en notacion 10
+                valor = valor*10;
+                // Obtenemos el valor numérico del caracter a las unidades
+                valor += (infija[i] - '0');
                 i++;
             }
-            //Se deja un espacio para poder hacer la distincion entre numeros consecutivos
-            encolar(Posfija, 0, ' ', false);
+            //Una vez con el número completo, ese valor se guarda en el nodo
+            encolar(Posfija, 0, '0', valor, false);
+            //Devolvemos el valor a 0
+            valor = 0;
         }
         
-        // Se vuelven a eliminar los espacio se la cadena
+        // Se vuelven a eliminar los espacio de la cadena
         while(isspace(infija[i]))
             i++;
         
-        // Los operadores pasan a la pila
+        // Pasamos a evaluar los operadores
 
         //Determinamos la prioridad
         operador = infija[i];
@@ -45,20 +51,19 @@ int main()
 
         if (es_vacia(Operadores))
         {
-            push(Operadores, prioridad, operador);
+            push(Operadores, prioridad, operador, 0, true);
         }
         // El parentesis de apertura se coloca sin medir prioridad
         else if (operador == '(')
         {
-            push(Operadores, prioridad, operador);
+            push(Operadores, prioridad, operador, 0, true);
         }
         // En los parentesis de cierra vaciamos la pila
         else if (operador == ')')
         { // Vaciamos los operadores hasta encontrar un "("
             while (Operadores->head->caracter != '(')
             {
-                encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, true);
-                encolar(Posfija, 0, ' ', false);
+                encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, 0, true);
                 pop(Operadores);
             }
             // Eliminamos el "("
@@ -68,7 +73,7 @@ int main()
         {    // Si tiene mayor prioridad se agrega directamente
             if (prioridad > Operadores->head->prioridad)
             {
-                push(Operadores, prioridad, operador);
+                push(Operadores, prioridad, operador, 0, true);
             }
             /* En los casos de mayor o igual prioridad se sacan
                 operadores hasta encontrae uno con mayor prioridad*/
@@ -76,15 +81,14 @@ int main()
             {
                 while (prioridad <= Operadores->head->prioridad)
                 {
-                    encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, true);
-                    encolar(Posfija, 0, ' ', false);
+                    encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, 0, true);
                     pop(Operadores);
                     // Si la lista se vacia, terminamos el ciclo
                     if (es_vacia(Operadores))
                         break;
                 }
                 // Una vez fuera los operadores mayores introducimos el nuevo
-                push(Operadores, prioridad, operador);
+                push(Operadores, prioridad, operador, 0, true);
             }
         }
     }
@@ -92,16 +96,17 @@ int main()
     // Se sacan los operadores restantes de la pila
     while (!es_vacia(Operadores))
     {
-        encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, true);
-        encolar(Posfija, 0, ' ', false);
+        encolar(Posfija, Operadores->head->prioridad, Operadores->head->caracter, 0, true);
         pop(Operadores);
     }
 
     printf("\nLa cadena posfija es: ");
     imprimir_cola(Posfija);
 
-    eliminar_pila(Operadores);
-    eliminar_pila(Posfija);
+    evaluar_cadena(Posfija);
+    
+	eliminar_pila(Operadores);
+	eliminar_pila(Posfija);
 
     return 0;
 }

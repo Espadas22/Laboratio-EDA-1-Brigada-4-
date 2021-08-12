@@ -1,4 +1,5 @@
 #include "posfija.h"
+#include <math.h>
 
 PILA* crear_pila()
 {
@@ -7,19 +8,20 @@ PILA* crear_pila()
     return nueva_pila;
 }
 
-NODO* crear_nodo(int prioridad, char caracter, bool operador)
+NODO* crear_nodo(int prioridad, char caracter, double valor, bool operador)
 {
     NODO *nuevo_nodo  = (NODO*) malloc(sizeof(NODO));
     nuevo_nodo -> siguiente = NULL;
     nuevo_nodo -> prioridad = prioridad;
     nuevo_nodo -> caracter = caracter;
+    nuevo_nodo -> valor = valor;
     nuevo_nodo -> operador = operador;
     return nuevo_nodo;
 }
 
-bool push(PILA *pila, int prioridad, char caracter)
+bool push(PILA *pila, int prioridad, char caracter, double valor, bool operador)
 {
-    NODO* nuevo = crear_nodo(prioridad, caracter, true);
+    NODO* nuevo = crear_nodo(prioridad, caracter, valor, operador);
     
     if (pila -> num == 0)
     {
@@ -55,9 +57,9 @@ bool pop(PILA *pila)
     return true;
 }
 
-bool encolar(COLA* cola, int prioridad, char caracter, bool operador)
+bool encolar(COLA* cola, int prioridad, char caracter, double valor, bool operador)
 {
-    NODO* temporal = crear_nodo(prioridad, caracter, operador);
+    NODO* temporal = crear_nodo(prioridad, caracter, valor, operador);
 
     if (cola -> num == 0)
     {
@@ -117,7 +119,11 @@ void imprimir_cola(COLA* cola)
     {
         while(temporal -> siguiente != NULL)
         {
-            printf("%c", temporal -> caracter);
+            if (temporal -> operador == false)
+                printf("%.2f ", temporal -> valor);
+            else
+                printf("%c ", temporal -> caracter);
+            
             temporal = temporal -> siguiente;
         }
     }
@@ -156,4 +162,54 @@ int determinar_prioridad(char caracter)
     }
 
     return prioridad;
+}
+
+void evaluar_cadena(COLA* cola)
+{   
+    // Pila que almacenara los valores
+    PILA* evaluacion = crear_pila();
+    // Guarda valoor para los operandos
+    double operando_auxiliar = 0;
+
+    for (NODO* auxiliar = cola -> head; auxiliar -> siguiente!= NULL; auxiliar = auxiliar -> siguiente)
+    {
+        // Si es un número se agrega a la pila
+        if (auxiliar -> operador == false)
+        {
+            push(evaluacion, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
+        }
+        // Si es un operador, se efectua la operacion
+        else 
+        {
+            // Se guarda el valor del segundo operando
+            operando_auxiliar = evaluacion -> head -> valor;
+            // Se elimina de la pila
+            pop(evaluacion);
+
+            // Se cambia el valor del primer operando segun la operacion
+            switch (auxiliar -> caracter)
+            {
+                case '+':
+                    evaluacion -> head -> valor += operando_auxiliar;
+                    break;
+                case '-':
+                    evaluacion -> head -> valor -= operando_auxiliar;
+                    break;
+                case '*':
+                    evaluacion -> head -> valor = (evaluacion -> head -> valor)*(operando_auxiliar);
+                    break;
+                case '/':
+                    evaluacion -> head -> valor = (evaluacion -> head -> valor) / (operando_auxiliar);
+                    break;
+                case '^':
+                    evaluacion -> head -> valor = pow(evaluacion -> head -> valor, operando_auxiliar);
+                    break;
+            }
+        }
+    }
+
+    printf("\nLa evaluacion de la cadena posfija es: %.2f\n", evaluacion -> head -> valor);
+
+    eliminar_pila(evaluacion);
+
 }
