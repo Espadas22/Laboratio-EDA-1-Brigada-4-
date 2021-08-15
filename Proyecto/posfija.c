@@ -120,13 +120,19 @@ void imprimir_cola(COLA* cola)
         while(temporal -> siguiente != NULL)
         {
             if (temporal -> operador == false)
-                printf("%.2f ", temporal -> valor);
+            {
+                // Si el valor no tiene parte decimal se imprime sólo el entero
+                if (fmod(temporal -> valor, 1) == 0)
+                    printf("%.0f ", temporal -> valor);
+                else
+                    printf("%.2f ", temporal -> valor);
+            }
             else
                 printf("%c ", temporal -> caracter);
             
             temporal = temporal -> siguiente;
         }
-    }
+    } // El último elemento de una cadena posfija siempre es un operador
     printf("%c\n", temporal -> caracter);
 }
 
@@ -208,7 +214,11 @@ void evaluar_cadena(COLA* cola)
         }
     }
 
-    printf("\nLa evaluacion de la cadena posfija es: %.2f\n", evaluacion -> head -> valor);
+    // Si el resultado no cuenta con parte decimal se imprime sólo el entero
+    if (fmod(evaluacion -> head -> valor, 1) == 0)
+        printf("\nLa evaluacion de la cadena posfija es: %.0f\n", evaluacion -> head -> valor);
+    else
+        printf("\nLa evaluacion de la cadena posfija es: %.2f\n", evaluacion -> head -> valor);
 
     eliminar_pila(evaluacion);
 

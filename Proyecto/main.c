@@ -1,9 +1,39 @@
 #include "posfija.h"
 
-int main()
+int main(int argc, char *argv[])
 {
-    //Asignamos los arreglos que guardarán las cadenas
+    //Asignamos el arreglo que guardará las cadena y le asignamos valor
     char infija[150];
+
+    // Para los casos en que se debe leer desde el archivo
+    if (argc == 1)
+    {
+        // Abrimos flujo para tomar los datos del archivo
+        FILE* flujo_infija = fopen("infija.txt", "r");
+
+        if (flujo_infija == NULL)
+        {
+            printf("No se encontró el archivo infija.txt\n");
+            return 0;
+        }
+
+        //Usamos un while para leer los caracteres
+        int i = 0;
+        while(feof(flujo_infija) == 0)
+        {
+            fscanf(flujo_infija, "%c", &infija[i]);
+            i++;
+        }
+
+        printf("La cadena infija en el archivo es: %s\n", infija);
+        fclose(flujo_infija);
+
+    }    
+    else //Para los casos en que la cadena se paso por linea de comandos
+        strcpy(infija, argv[1]);
+
+    //Para los casos en que al cadena esta en un archivo de texto
+    
     //Auxiliares para la creacion de los nodos
     char operador;
     int prioridad;
@@ -12,9 +42,6 @@ int main()
 	PILA* Operadores = crear_pila();
     COLA* Posfija = crear_pila();
 
-    printf("Introduce una cadena en notacion infija:\n");
-    gets(infija);
-
     //Comenzamos a recorrer la cadena
     for (int i = 0; i < strlen(infija); i++)
     {
@@ -22,10 +49,10 @@ int main()
         while(isspace(infija[i]))
             i++;
         // Los numeros pasan directo a la cadena posfija
-        if (isalnum(infija[i]))
+        if (isdigit(infija[i]))
         {
             // Para tomar todos los dígitos que componen un numero
-            while (isalnum(infija[i]))
+            while (isdigit(infija[i]))
             {
                 // Se acomoda segun su posicion en notacion 10
                 valor = valor*10;
