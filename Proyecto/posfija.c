@@ -119,20 +119,11 @@ void imprimir_cola(COLA* cola)
     {
         while(temporal -> siguiente != NULL)
         {
-            if (temporal -> operador == false)
-            {
-                // Si el valor no tiene parte decimal se imprime sólo el entero
-                if (fmod(temporal -> valor, 1) == 0)
-                    printf("%.0f ", temporal -> valor);
-                else
-                    printf("%.2f ", temporal -> valor);
-            }
-            else
-                printf("%c ", temporal -> caracter);
+            printf("%c ", temporal -> caracter);
             
             temporal = temporal -> siguiente;
         }
-    } // El último elemento de una cadena posfija siempre es un operador
+    } 
     printf("%c\n", temporal -> caracter);
 }
 
@@ -179,9 +170,11 @@ void evaluar_cadena(COLA* cola)
 
     for (NODO* auxiliar = cola -> head; auxiliar -> siguiente!= NULL; auxiliar = auxiliar -> siguiente)
     {
-        // Si es un número se agrega a la pila
+        // Si es un número se agrega a la pila se pide su valor y se agrega a la pila
         if (auxiliar -> operador == false)
         {
+            printf("Introduce valor para %c: ", auxiliar -> caracter);
+            scanf("%lf", &auxiliar ->valor);
             push(evaluacion, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
         }
         // Si es un operador, se efectua la operacion
@@ -222,4 +215,23 @@ void evaluar_cadena(COLA* cola)
 
     eliminar_pila(evaluacion);
 
+}
+
+bool guardar_cadena(COLA* cola)
+{
+    FILE* flujo_posfija = fopen("posfija.text", "a");
+
+    if (flujo_posfija == NULL)
+    {
+        printf("Error generando el archivo");
+        return false;
+    }
+
+    for (NODO* auxiliar = cola -> head; auxiliar -> siguiente != NULL; auxiliar = auxiliar -> siguiente)
+    {
+        fprintf(flujo_posfija, "%c ", auxiliar -> caracter);
+    }
+
+    printf("Cadena guardada con exito en posfija.txt\n");
+    fclose(flujo_posfija);
 }
