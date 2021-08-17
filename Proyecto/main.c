@@ -5,32 +5,25 @@ int main(int argc, char *argv[])
     //Iniciamos el arreglo que guaradrá el valor de la cadena infija
     char infija[150];
 
-    // Para los casos en que se debe leer desde el archivo
-    if (argc == 1)
+    // Abrimos flujo para tomar los datos del archivo
+    FILE* flujo_infija = fopen(argv[1], "r");
+
+    if (flujo_infija == NULL)
     {
-        // Abrimos flujo para tomar los datos del archivo
-        FILE* flujo_infija = fopen("infija.txt", "r");
+        printf("No se encontró el archivo %s\n", argv[1]);
+        return 0;
+    }
 
-        if (flujo_infija == NULL)
-        {
-            printf("No se encontró el archivo infija.txt\n");
-            return 0;
-        }
+    //Usamos un while para leer los caracteres
+    int pos = 0;
+    while(feof(flujo_infija) == 0)
+    {
+        fscanf(flujo_infija, "%c", &infija[pos]);
+        pos++;
+    }
 
-        //Usamos un while para leer los caracteres
-        int i = 0;
-        while(feof(flujo_infija) == 0)
-        {
-            fscanf(flujo_infija, "%c", &infija[i]);
-            i++;
-        }
-
-        printf("La cadena infija en el archivo es: %s\n", infija);
-        fclose(flujo_infija);
-
-    }    
-    else //Para los casos en que la cadena se paso por linea de comandos
-        strcpy(infija, argv[1]);
+    printf("La cadena infija en el archivo es: %s\n", infija);
+    fclose(flujo_infija);    
     
     //Auxiliares para la creacion de los nodos
     char operador;

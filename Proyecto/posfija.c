@@ -1,10 +1,10 @@
 #include "posfija.h"
-#include <math.h>
 
 PILA* crear_pila()
 {
     PILA* nueva_pila = (PILA*) malloc(sizeof(PILA));
     nueva_pila -> head = nueva_pila -> tail = NULL;
+    nueva_pila -> num = 0; 
     return nueva_pila;
 }
 
@@ -44,9 +44,7 @@ bool pop(PILA *pila)
     NODO *temporal = pila -> head;
     
     if (pila -> num == 1)
-    {
         pila -> head = pila -> tail = NULL;
-    }
     else
         pila -> head = pila -> head -> siguiente;
     
@@ -74,7 +72,6 @@ bool encolar(COLA* cola, int prioridad, char caracter, double valor, bool operad
     }
 
     return true;
-
 }
 
 bool es_vacia(PILA *pila){
@@ -165,17 +162,37 @@ void evaluar_cadena(COLA* cola)
 {   
     // Pila que almacenara los valores
     PILA* evaluacion = crear_pila();
-    // Guarda valoor para los operandos
+    // Guarda valor para los operandos
     double operando_auxiliar = 0;
+    // Para evaluar los nodos con mismos caracteres
+    bool repetido = false;
 
-    for (NODO* auxiliar = cola -> head; auxiliar -> siguiente!= NULL; auxiliar = auxiliar -> siguiente)
+    for (NODO* auxiliar = cola -> head; auxiliar -> siguiente != NULL; auxiliar = auxiliar -> siguiente)
     {
-        // Si es un número se agrega a la pila se pide su valor y se agrega a la pila
+        // Si es un número se agrega a la pila
         if (auxiliar -> operador == false)
         {
-            printf("Introduce valor para %c: ", auxiliar -> caracter);
-            scanf("%lf", &auxiliar ->valor);
+            if (evaluacion -> num > 0)
+            {
+                for (NODO* verificador = evaluacion -> head; verificador != NULL; verificador = verificador -> siguiente)
+                {
+                    if (auxiliar -> caracter == verificador -> caracter)
+                    {
+                        auxiliar -> valor = verificador -> valor;
+                        repetido = true;
+                        break;
+                    }
+                }
+            }
+
+            if (repetido == false)
+            {
+                printf("Introduce valor para %c: ", auxiliar -> caracter);
+                scanf("%lf", &auxiliar -> valor);
+            }
+            
             push(evaluacion, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
+            repetido = false;
         }
         // Si es un operador, se efectua la operacion
         else 
