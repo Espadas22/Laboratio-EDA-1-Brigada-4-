@@ -160,8 +160,10 @@ int determinar_prioridad(char caracter)
 
 void evaluar_cadena(COLA* cola)
 {   
-    // Pila que almacenara los valores
+    // Pila que almacenara los valores con los que se haran operaciones
     PILA* evaluacion = crear_pila();
+    // Pila para guardar los valores a usar
+    COLA* variables = crear_pila();
     // Guarda valor para los operandos
     double operando_auxiliar = 0;
     // Para evaluar los nodos con mismos caracteres
@@ -172,9 +174,9 @@ void evaluar_cadena(COLA* cola)
         // Si es un número se agrega a la pila
         if (auxiliar -> operador == false)
         {
-            if (evaluacion -> num > 0)
+            if (variables -> num > 0)
             {
-                for (NODO* verificador = evaluacion -> head; verificador != NULL; verificador = verificador -> siguiente)
+                for (NODO* verificador = variables -> head; verificador != NULL; verificador = verificador -> siguiente)
                 {
                     if (auxiliar -> caracter == verificador -> caracter)
                     {
@@ -189,6 +191,8 @@ void evaluar_cadena(COLA* cola)
             {
                 printf("Introduce valor para %c: ", auxiliar -> caracter);
                 scanf("%lf", &auxiliar -> valor);
+                // Se agrega el nuevo valor a la memoria
+                encolar(variables, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
             }
             
             push(evaluacion, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
@@ -231,7 +235,7 @@ void evaluar_cadena(COLA* cola)
         printf("\nLa evaluacion de la cadena posfija es: %.2f\n", evaluacion -> head -> valor);
 
     eliminar_pila(evaluacion);
-
+    eliminar_pila(variables);
 }
 
 bool guardar_cadena(COLA* cola)
