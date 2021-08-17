@@ -39,5 +39,6 @@ int determinar_prioridad(char caracter);
 void imprimir_cola(COLA* cola);
 void evaluar_cadena(COLA* cola);
 bool guardar_cadena(COLA* cola);
+bool leer_valores(COLA* cadena);
 
 #endif

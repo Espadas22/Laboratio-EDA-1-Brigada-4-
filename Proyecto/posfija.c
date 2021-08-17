@@ -164,10 +164,18 @@ void evaluar_cadena(COLA* cola)
     PILA* evaluacion = crear_pila();
     // Pila para guardar los valores a usar
     COLA* variables = crear_pila();
+    // Registrar respuesta del usuario
+    int metodo = 0;
     // Guarda valor para los operandos
     double operando_auxiliar = 0;
     // Para evaluar los nodos con mismos caracteres
     bool repetido = false;
+
+    printf("Agregar valores desde: (1) Archivo (2) Consola\n");
+    scanf("%i", &metodo);
+
+    if (metodo == 1)
+        leer_valores(variables);
 
     for (NODO* auxiliar = cola -> head; auxiliar -> siguiente != NULL; auxiliar = auxiliar -> siguiente)
     {
@@ -175,11 +183,11 @@ void evaluar_cadena(COLA* cola)
         if (auxiliar -> operador == false)
         {
             if (variables -> num > 0)
-            {
+            {   // Revismamos si ya se tiene registrada esa variable
                 for (NODO* verificador = variables -> head; verificador != NULL; verificador = verificador -> siguiente)
                 {
                     if (auxiliar -> caracter == verificador -> caracter)
-                    {
+                    {   // Si ya existe, se asigna valor sin preguntarlo
                         auxiliar -> valor = verificador -> valor;
                         repetido = true;
                         break;
@@ -188,10 +196,10 @@ void evaluar_cadena(COLA* cola)
             }
 
             if (repetido == false)
-            {
+            {   // Si la variable no se encuentra registrada se pregunta al usuario por su valor
                 printf("Introduce valor para %c: ", auxiliar -> caracter);
                 scanf("%lf", &auxiliar -> valor);
-                // Se agrega el nuevo valor a la memoria
+                // Se agrega el nuevo valor a la cola
                 encolar(variables, auxiliar -> prioridad, auxiliar -> caracter, auxiliar -> valor, auxiliar -> operador);
             }
             
@@ -255,4 +263,45 @@ bool guardar_cadena(COLA* cola)
 
     printf("Cadena guardada con exito en posfija.txt\n");
     fclose(flujo_posfija);
+}
+
+bool leer_valores(COLA* cadena)
+{
+    char archivo[50];
+    fflush(stdin);
+    printf("\nIngresa el nombre del archivo: ");
+    scanf("%s", &archivo);
+
+    // Auxiliares en la creacion de nodos
+    char caracter = '0';
+    char igual = '0';
+    double valor = 0;
+
+    FILE* flujo_respuestas = fopen(archivo, "r");
+
+    if (flujo_respuestas == NULL)
+    {
+        printf("No se encontró el archivo %s", archivo);
+        return false;
+    }
+
+    while(feof(flujo_respuestas) == 0)
+    {
+        
+        fscanf(flujo_respuestas, "%c %c %lf", &caracter, &igual, &valor);
+        // Corroboramos que tengan la estructura de ingreso
+        if (isalpha(caracter) && igual == '=')
+        {
+            if (fmod(valor, 1) == 0)
+                printf("El valor de %c es %0.f\n", caracter, valor);
+            else 
+                printf("El valor de %c es %2.f\n", caracter, valor);
+
+            encolar(cadena, 0, caracter, valor, false);
+        }
+        // Eliminamos el caracter de escape.
+        fscanf(flujo_respuestas, "%c", &caracter);
+    }
+
+    fclose(flujo_respuestas);
 }
