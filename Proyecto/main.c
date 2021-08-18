@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
     // El usuario elige acción a realziar con la cadena
     int eleccion = 0;
-    printf("\nQue accion quieres realizar?\n(1) Guardar cadena\n(2) Evaluar Cadena\n(3) Guardar y evaluar\n");
+    printf("\nQue accion quieres realizar?\n(1) Guardar cadena\n(2) Evaluar Cadena\n(3) Guardar y evaluar\n\n");
     scanf("%d", &eleccion);
 
     if (eleccion == 1 || eleccion == 3)

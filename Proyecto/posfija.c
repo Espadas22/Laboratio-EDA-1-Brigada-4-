@@ -171,7 +171,7 @@ void evaluar_cadena(COLA* cola)
     // Para evaluar los nodos con mismos caracteres
     bool repetido = false;
 
-    printf("Agregar valores desde: (1) Archivo (2) Consola\n");
+    printf("\nAgregar valores desde: (1) Archivo (2) Consola\n\n");
     scanf("%i", &metodo);
 
     if (metodo == 1)
@@ -196,7 +196,11 @@ void evaluar_cadena(COLA* cola)
             }
 
             if (repetido == false)
-            {   // Si la variable no se encuentra registrada se pregunta al usuario por su valor
+            {   
+                // Si la variable no se encuentra registrada se pregunta al usuario por su valor
+                if (metodo == 1)
+                    printf("\nValor para '%c' no encontrado\n", auxiliar -> caracter);
+                
                 printf("Introduce valor para %c: ", auxiliar -> caracter);
                 scanf("%lf", &auxiliar -> valor);
                 // Se agrega el nuevo valor a la cola
@@ -248,11 +252,16 @@ void evaluar_cadena(COLA* cola)
 
 bool guardar_cadena(COLA* cola)
 {
-    FILE* flujo_posfija = fopen("posfija.text", "a");
+    char archivo[50];
+    fflush(stdin);
+    printf("\nIngresa el nombre del archivo donde se guardara la cadena: ");
+    scanf("%s", &archivo);
+
+    FILE* flujo_posfija = fopen(archivo, "a");
 
     if (flujo_posfija == NULL)
     {
-        printf("Error generando el archivo");
+        printf("\nError generando el archivo\n");
         return false;
     }
 
@@ -261,7 +270,10 @@ bool guardar_cadena(COLA* cola)
         fprintf(flujo_posfija, "%c ", auxiliar -> caracter);
     }
 
-    printf("Cadena guardada con exito en posfija.txt\n");
+    // En caso de que en el archivo se guarde más de una cadena
+    fprintf(flujo_posfija, "\n");
+
+    printf("\nCadena guardada con exito en %s\n", archivo);
     fclose(flujo_posfija);
 }
 
