@@ -148,6 +148,8 @@ int determinar_prioridad(char caracter)
         case '/':
             prioridad = 2;
             break;
+        case '%':
+            prioridad = 2;
         case '^':
             prioridad = 3;
             break;
@@ -232,6 +234,9 @@ void evaluar_cadena(COLA* cola)
                     break;
                 case '/':
                     evaluacion -> head -> valor = (evaluacion -> head -> valor) / (operando_auxiliar);
+                    break;
+                case '%':
+                    evaluacion -> head -> valor = fmod(evaluacion -> head -> valor, operando_auxiliar);
                     break;
                 case '^':
                     evaluacion -> head -> valor = pow(evaluacion -> head -> valor, operando_auxiliar);
